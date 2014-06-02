@@ -10,14 +10,16 @@ RSpec::Core::Example.class_eval do
   alias ignorant_run run
 
   def run(example_group_instance, reporter)
-    Fiber.new do
-      EM.run do
+    EM.run do
+      Fiber.new do
         df = EM::DefaultDeferrable.new
         df.callback { |x| EM.stop }
+
         ignorant_run example_group_instance, reporter
+
         df.succeed
-      end
-    end.resume
+      end.resume
+    end
   end
 
 end
