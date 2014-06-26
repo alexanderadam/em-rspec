@@ -18,9 +18,7 @@ RSpec::Core::Example.class_eval do
           df = EM::DefaultDeferrable.new
           df.callback { |x| EM.stop }
   
-          $fiber = Fiber.current
           ignorant_run example_group_instance, reporter
-          Fiber.yield
           
           df.succeed
         end.resume
